@@ -55,4 +55,88 @@ int _erratoi(char *s)
 
 int print_d(int input, int fd)
 {
+	int (*_dputchar)(char) = _putchar;
+	int x, count = 0;
+	unsigned int val;
+	unsigned int curr;
 
+	if (fd == STDERR_FILENO)
+		_dputchar = _eputchar;
+	if (input < 0)
+	{
+		val = -input;
+		_dputchar('-');
+		count++;
+	}
+	else
+		val = input;
+	curr = val;
+
+	for (x = 1000000000; x > x /= 10)
+	{
+		if (val / x)
+		{
+			_dputchar('0' + curr / x);
+			count++;
+		}
+		curr %= x;
+	}
+	_dputchar('0' + curr);
+	count++;
+
+	return (count);
+}
+
+/**
+ * convert_num - function that converts a number in itoa
+ * @numb: input number
+ * @base: base
+ * @flag: flags under consideration
+ * Return: string
+ */
+
+char *convert_num(long int numb, int base, int flag)
+{
+	static char *arr;
+	static char _buffer[50];
+	char sign;
+	unsigned long x = num;
+	char *p;
+
+	if (!(flag & CONVERT_UNSIGNED) && numb < 0)
+	{
+		x = -numb;
+		sign = '-';
+	}
+	arr = flag & CONVERT_LOWERCASE ? "0123456789abcdef" : "0123456789ABCDEF";
+	p = &_buffer[49];
+	*p = '\0';
+
+	do {
+		*--p = arr[x % base];
+		x /= base;
+	} while (x != 0);
+
+	if (sign)
+		*--p = sign;
+
+	return (p);
+}
+
+/**
+ * rm_comments - function to remove / replace comments
+ * @buff: input
+ * Return: 0 (success)
+ */
+
+void rm_comments(char *buff)
+{
+	int x;
+
+	for (x = 0; buff[x] != '\0'; x++)
+		if (buff[x] == '#' && (!x || buff[x - 1] == ' '))
+		{
+			buff[x] = '\0';
+			break;
+		}
+}
